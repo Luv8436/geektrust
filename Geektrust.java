@@ -2,16 +2,20 @@ import java.util.*;
 import java.io.File;  // Import the File class
 
 public class Geektrust {
-
-	public static void main(String[] args)  {
-		String filePath = args[0];
+    
+    public static void main(String[] args)  {
+        String filePath = args[0];
 		//Parse the file and call your code
         // hashmap storing the routes and distance of each train
-        HashMap<String , Integer> hma = new HashMap<>();
-        HashMap<String , Integer> hmb = new HashMap<>();
         // storing the values in hashmap
-        hashmapA(hma);
-        hashmapB(hmb);
+        String[] stationA = {"CHN" , "SLM" , "BLR" , "KRN" , "HYB" , "NGP" , "ITJ" , "BPL" , "AGA" , "NDL"};
+        int[] distanceA = {0 , 350 , 550 , 900 , 1200 , 1600 , 1900 , 2000 , 2500 , 2700};
+        
+        String[] stationB = {"TVC" , "SRR" , "MAQ" , "MAO" , "PNE" , "HYB" , "NGP" , "ITJ" , "BPL" , "PTA" , "NJP" , "GHY"};
+        int[] distanceB = {0 , 300 , 600 , 1000, 1400 , 2000 , 2400 , 2700 , 2800 , 3800 , 4200 , 4700};
+        
+        HashMap<String , Integer> hma = hashmap(stationA , distanceA);
+        HashMap<String , Integer> hmb = hashmap(stationB , distanceB);
         // reading input from the input.txt file
         File myObj = new File(filePath);
         Scanner myReader = new Scanner(myObj);
@@ -29,12 +33,10 @@ public class Geektrust {
             trainB.add(arrB[i]);
         } 
 
+        // remove bogies before hyb from train A and B whose distances 
+        // are less than given distances.
         rmvBoggiesBeforeHYB(trainA , hma , 1200);
         rmvBoggiesBeforeHYB(trainB , hmb , 2000);
-        // for(int s=trainA.size()-1;s>=0;s--){
-        //     String curr= trainA.get(s);
-        //     System.out.println(curr+" "+hma.get(curr));
-        // }
         
         trainA.add(0 , "ARRIVAL");
         trainB.add(0 , "ARRIVAL");
@@ -50,10 +52,7 @@ public class Geektrust {
         LinkedList<String> trainAB = new LinkedList<>();
         mergeTwoTrains(trainAB , trainA , AfterHyb);
         mergeTwoTrains(trainAB , trainB , AfterHyb);
-        trainAB.addFirst("ENGINE");
-        trainAB.addFirst("ENGINE");
-        trainAB.addFirst("TRAIN_AB");
-        trainAB.addFirst("DEPARTURE");
+        trainAB.addFirst("ENGINE ENGINE TRAIN_AB DEPARTURE");
         displayTrain(trainAB);
         
 	}
@@ -74,7 +73,7 @@ public class Geektrust {
             if(curr.equals("ENGINE")){
                 break;
             }
-            // remove the bogie in train A before hyderabad(i.e. distance 1200km)
+            // remove the bogie in train A before hyderabad(i.e. distance < 1200km)
             if(hma.get(curr)==null){
                 continue;
             }
@@ -107,33 +106,13 @@ public class Geektrust {
     }
     
     // store chart for train A before hyderabad
-    public static void hashmapA(HashMap<String , Integer> hma ){
-        hma.put("CHN",0);
-        hma.put("SLM",350);
-        hma.put("BLR",550);
-        hma.put("KRN",900);
-        hma.put("HYB",1200);
-        hma.put("NGP",1600);
-        hma.put("ITJ",1900);
-        hma.put("BPL",2000);
-        hma.put("AGA",2500);
-        hma.put("NDL",2700);
+    public static HashMap<String , Integer> hashmap(String[] station , int[] distance ){
+        HashMap<String , Integer> hm = new HashMap<>();
+        for(int i=0;i<station.length;i++){
+            hm.put(station[i] , distance[i]);
+        }
+        return hm;
     }
-    // store chart for train B before hyderabad
-    public static void hashmapB(HashMap<String , Integer> hma ){
-        hma.put("TVC" , 0);
-        hma.put("SRR" , 300);
-        hma.put("MAQ" , 600);
-        hma.put("MAO" , 1000);
-        hma.put("PNE" , 1400);
-        hma.put("HYB" , 2000);
-        hma.put("NGP" , 2400);
-        hma.put("ITJ" , 2700);
-        hma.put("BPL" , 2800);
-        hma.put("PTA" , 3800);
-        hma.put("NJP" , 4200);
-        hma.put("GHY" , 4700);
-        
-    }
+    
 
 }
