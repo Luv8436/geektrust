@@ -17,8 +17,8 @@ public class Geektrust {
             String[] stationB = {"TVC" , "SRR" , "MAQ" , "MAO" , "PNE" , "HYB" , "NGP" , "ITJ" , "BPL" , "PTA" , "NJP" , "GHY"};
             int[] distanceB = {0 , 300 , 600 , 1000, 1400 , 2000 , 2400 , 2700 , 2800 , 3800 , 4200 , 4700};
             
-            HashMap<String , Integer> hma = hashmap(stationA , distanceA);
-            HashMap<String , Integer> hmb = hashmap(stationB , distanceB);
+            HashMap<String , Integer> hma = makeHashmap(stationA , distanceA);
+            HashMap<String , Integer> hmb = makeHashmap(stationB , distanceB);
 
             // reading input from the input.txt file
             File myObj = new File(filePath);
@@ -26,17 +26,10 @@ public class Geektrust {
             String[] arrA = myReader.nextLine().split(" ");
             String[] arrB = myReader.nextLine().split(" ");
             myReader.close();
-
-            // storing the train A input in the linked list data structure
-            LinkedList<String> trainA = new LinkedList<>();
-            for(String s : arrA){
-                trainA.add(s);
-            }
-            // storing the train A input in the linked list data structure
-            LinkedList<String> trainB = new LinkedList<>();
-            for(String s : arrB){
-                trainB.add(s);
-            }
+            
+            // storing the trains inputs in the linked list data structure
+            LinkedList<String> trainA = makeTrain(arrA);
+            LinkedList<String> trainB = makeTrain(arrB);
 
             // remove bogies before hyb from train A and B whose distances 
             // are less than given distances.
@@ -71,6 +64,14 @@ public class Geektrust {
             e.printStackTrace();
         }
 	}
+
+    public static LinkedList<String> makeTrain(String[] arr){
+        LinkedList<String> train = new LinkedList<>();
+        for(String s : arr){
+            train.add(s);
+        }
+        return train;
+    }
 
     // change distances in the chart after reaching hyb and make one single chart for further
     public static void changeDistance(HashMap<String , Integer>AfterHyb , HashMap<String,Integer> hma , int distance){   
@@ -129,7 +130,7 @@ public class Geektrust {
     }
     
     // store chart for train before hyderabad
-    public static HashMap<String , Integer> hashmap(String[] station , int[] distance ){
+    public static HashMap<String , Integer> makeHashmap(String[] station , int[] distance ){
         HashMap<String , Integer> hm = new HashMap<>();
         for(int i=0;i<station.length;i++){
             hm.put(station[i] , distance[i]);
